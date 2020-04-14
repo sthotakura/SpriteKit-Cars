@@ -14,7 +14,6 @@
 		694069C9244332710051BCA3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 694069C8244332710051BCA3 /* Assets.xcassets */; };
 		694069CC244332710051BCA3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 694069CA244332710051BCA3 /* LaunchScreen.storyboard */; };
 		694069D8244333920051BCA3 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694069D7244333920051BCA3 /* MenuScene.swift */; };
-		694069DC244379180051BCA3 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 694069DB244379180051BCA3 /* GameScene.sks */; };
 		695882E92444F84100225A5E /* GameConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695882E82444F84100225A5E /* GameConfig.swift */; };
 /* End PBXBuildFile section */
 
@@ -28,7 +27,6 @@
 		694069CB244332710051BCA3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		694069CD244332710051BCA3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		694069D7244333920051BCA3 /* MenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
-		694069DB244379180051BCA3 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		695882E82444F84100225A5E /* GameConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameConfig.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -90,7 +88,6 @@
 		694069D5244332AE0051BCA3 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
-				694069DB244379180051BCA3 /* GameScene.sks */,
 				694069C1244332700051BCA3 /* GameScene.swift */,
 				694069D7244333920051BCA3 /* MenuScene.swift */,
 				695882E82444F84100225A5E /* GameConfig.swift */,
@@ -166,7 +163,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				694069DC244379180051BCA3 /* GameScene.sks in Resources */,
 				694069C7244332700051BCA3 /* Main.storyboard in Resources */,
 				694069C9244332710051BCA3 /* Assets.xcassets in Resources */,
 				694069CC244332710051BCA3 /* LaunchScreen.storyboard in Resources */,

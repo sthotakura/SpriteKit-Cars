@@ -26,6 +26,11 @@ enum PhysicsCategories {
 
 enum ZPositions {
     static let road : CGFloat = 0
-    static let userCar : CGFloat = 1
-    static let trafficCar : CGFloat = ZPositions.userCar
+    static let cars : CGFloat = 1
+}
+
+class Helper {
+    static func randomBetweenTwoNumbers(firstNumber : CGFloat ,  secondNumber : CGFloat) -> CGFloat{
+        return CGFloat(arc4random())/CGFloat(UINT32_MAX) * abs(firstNumber - secondNumber) + min(firstNumber, secondNumber)
+    }
 }

@@ -43,14 +43,13 @@ class MenuScene: SKScene {
         scoreLabel.fontColor = labelColor
         scoreLabel.position = CGPoint(x: frame.midX, y: frame.midY - scoreLabel.frame.size.height*5)
         addChild(scoreLabel)
-        
+
         let highScoreLabel = SKLabelNode(text: "High Score: " + "\(UserDefaults.standard.integer(forKey: "HighScore"))")
         highScoreLabel.fontName = "AvenirNext-Bold"
         highScoreLabel.fontSize = 40.0
         highScoreLabel.fontColor = labelColor
         highScoreLabel.position = CGPoint(x: frame.midX, y: scoreLabel.position.y - highScoreLabel.frame.size.height * 2)
         addChild(highScoreLabel)
-
     }
     
     func animate(label: SKLabelNode) {
@@ -66,8 +65,8 @@ class MenuScene: SKScene {
             for node in nodes(at: location) {
                 if let label = node as? SKLabelNode {
                     if label.name != nil && label.name == "playLabel" {
-                        let gameScene = GameScene(fileNamed: "GameScene")
-                        gameScene?.scaleMode = .fill
+                        let gameScene = GameScene(size: view!.bounds.size)
+                        gameScene.scaleMode = .resizeFill
                         view!.presentScene(gameScene)
                     }
                 }
