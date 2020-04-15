@@ -18,19 +18,24 @@ enum Cars {
     ]
 }
 
-enum PhysicsCategories {
+enum PhysicsCategory {
     static let none: UInt32 = 0
-    static let userCarCategory: UInt32 = 0x01
-    static let trafficCategory: UInt32 = 0x01 << 1
+    static let userCar: UInt32 = 0x01
+    static let trafficCar: UInt32 = 0x01 << 1
 }
 
 enum ZPositions {
     static let road : CGFloat = 0
     static let cars : CGFloat = 1
+    static let score : CGFloat = 2
 }
 
 class Helper {
-    static func randomBetweenTwoNumbers(firstNumber : CGFloat ,  secondNumber : CGFloat) -> CGFloat{
-        return CGFloat(arc4random())/CGFloat(UINT32_MAX) * abs(firstNumber - secondNumber) + min(firstNumber, secondNumber)
+    static func random() -> CGFloat {
+        return CGFloat(arc4random()) / CGFloat(0xFFFFFFFF)
     }
+    
+    static func random(min: CGFloat, max: CGFloat) -> CGFloat {
+        return random() * (max - min) + min
+    }    
 }

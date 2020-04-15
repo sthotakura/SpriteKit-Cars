@@ -15,6 +15,9 @@
 		694069CC244332710051BCA3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 694069CA244332710051BCA3 /* LaunchScreen.storyboard */; };
 		694069D8244333920051BCA3 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694069D7244333920051BCA3 /* MenuScene.swift */; };
 		695882E92444F84100225A5E /* GameConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695882E82444F84100225A5E /* GameConfig.swift */; };
+		695882EE2447A02100225A5E /* Car.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695882ED2447A02100225A5E /* Car.swift */; };
+		695882F02447A02E00225A5E /* TrafficCar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695882EF2447A02E00225A5E /* TrafficCar.swift */; };
+		695882F22447A71F00225A5E /* Woosh.wav in Resources */ = {isa = PBXBuildFile; fileRef = 695882F12447A71F00225A5E /* Woosh.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +31,9 @@
 		694069CD244332710051BCA3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		694069D7244333920051BCA3 /* MenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
 		695882E82444F84100225A5E /* GameConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameConfig.swift; sourceTree = "<group>"; };
+		695882ED2447A02100225A5E /* Car.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Car.swift; sourceTree = "<group>"; };
+		695882EF2447A02E00225A5E /* TrafficCar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrafficCar.swift; sourceTree = "<group>"; };
+		695882F12447A71F00225A5E /* Woosh.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Woosh.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +66,7 @@
 		694069BA244332700051BCA3 /* Cars */ = {
 			isa = PBXGroup;
 			children = (
+				695882F12447A71F00225A5E /* Woosh.wav */,
 				694069D6244332C60051BCA3 /* Assets */,
 				694069D5244332AE0051BCA3 /* Scenes */,
 				694069D4244332A80051BCA3 /* Controllers */,
@@ -88,6 +95,7 @@
 		694069D5244332AE0051BCA3 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				695882EA24479FE200225A5E /* Nodes */,
 				694069C1244332700051BCA3 /* GameScene.swift */,
 				694069D7244333920051BCA3 /* MenuScene.swift */,
 				695882E82444F84100225A5E /* GameConfig.swift */,
@@ -103,6 +111,15 @@
 				694069CA244332710051BCA3 /* LaunchScreen.storyboard */,
 			);
 			path = Assets;
+			sourceTree = "<group>";
+		};
+		695882EA24479FE200225A5E /* Nodes */ = {
+			isa = PBXGroup;
+			children = (
+				695882ED2447A02100225A5E /* Car.swift */,
+				695882EF2447A02E00225A5E /* TrafficCar.swift */,
+			);
+			path = Nodes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -164,6 +181,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				694069C7244332700051BCA3 /* Main.storyboard in Resources */,
+				695882F22447A71F00225A5E /* Woosh.wav in Resources */,
 				694069C9244332710051BCA3 /* Assets.xcassets in Resources */,
 				694069CC244332710051BCA3 /* LaunchScreen.storyboard in Resources */,
 			);
@@ -178,6 +196,8 @@
 			files = (
 				694069C2244332700051BCA3 /* GameScene.swift in Sources */,
 				695882E92444F84100225A5E /* GameConfig.swift in Sources */,
+				695882EE2447A02100225A5E /* Car.swift in Sources */,
+				695882F02447A02E00225A5E /* TrafficCar.swift in Sources */,
 				694069D8244333920051BCA3 /* MenuScene.swift in Sources */,
 				694069C4244332700051BCA3 /* GameViewController.swift in Sources */,
 				694069BC244332700051BCA3 /* AppDelegate.swift in Sources */,
