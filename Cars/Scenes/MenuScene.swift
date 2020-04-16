@@ -60,18 +60,9 @@ class MenuScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let touch = touches.first {
-            let location = touch.location(in: self)
-            for node in nodes(at: location) {
-                if let label = node as? SKLabelNode {
-                    if label.name != nil && label.name == "playLabel" {
-                        let gameScene = GameScene(size: view!.bounds.size)
-                        gameScene.scaleMode = .resizeFill
-                        view!.presentScene(gameScene)
-                    }
-                }
-            }
-        }
+        let gameScene = GameScene(size: view!.bounds.size)
+        gameScene.scaleMode = .resizeFill
+        view!.presentScene(gameScene)
     }
 
 }
