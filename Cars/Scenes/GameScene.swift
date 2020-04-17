@@ -169,7 +169,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func setupScoreLabel() {
         scoreLabel.fontSize = 20.0
         scoreLabel.fontName = "AvenirNext-Bold"
-        scoreLabel.fontColor = UIColor.white //(red: 44/255, green: 62/255, blue: 80/255, alpha: 1.0)
+        scoreLabel.fontColor = UIColor.white
         scoreLabel.position = scorePosition
         scoreLabel.zPosition = ZPositions.score
         
