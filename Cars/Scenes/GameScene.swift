@@ -142,9 +142,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     if y - Car.DefaultSize.height < rowMin {
                         y = rowMin + Car.DefaultSize.height + CGFloat(15)
                     }
-                    let position = CGPoint(x: x, y: y)
 
-                    let trafficCar = TrafficCar(imageNamed: getRandomCarName(), row: row, col: lane, position: position, carSpeed: laneSpeed)
+                    let trafficCar = TrafficCar(imageNamed: getRandomCarName(), row: row, col: lane, position: CGPoint(x: x, y: y), carSpeed: laneSpeed)
                     
                     addChild(trafficCar)
                 }
@@ -160,10 +159,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let y = frame.maxY - Helper.random(min: 0, max: frame.size.height / 4) * CGFloat(lane)
             
             for c in 1...GameConfig.CoinsPerLane {
-                let coinPosition = CGPoint(x: x, y: y - (CGFloat(c - 1 ) * (GameConfig.CoinSize.height + CGFloat(5))))
+                let coin = Coin(position: CGPoint(x: x, y: y - (CGFloat(c - 1 ) * (GameConfig.CoinSize.height + CGFloat(5)))))
 
-                let coin = Coin(position: coinPosition)
-                
                 addChild(coin)
             }
         }
