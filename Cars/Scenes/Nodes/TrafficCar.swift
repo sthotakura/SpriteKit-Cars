@@ -16,13 +16,14 @@ class TrafficCar : Car {
     init(imageNamed: String, row: Int, col: Int, position: CGPoint, carSpeed: CGFloat = 5.0) {
         super.init(imageNamed: imageNamed, carSpeed: carSpeed)
         
-        name = "trafficCar"
+        self.name = "trafficCar"
         self.row = row
         self.col = col
         self.initialPosition = position
         
         self.position = position
-
+        self.zPosition = ZPositions.cars
+        
         physicsBody = SKPhysicsBody(rectangleOf: size)
         physicsBody?.affectedByGravity = false
         physicsBody?.categoryBitMask = PhysicsCategory.trafficCar
