@@ -21,6 +21,7 @@
 		69A254FD2449949100F2C158 /* Coin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A254FC2449949100F2C158 /* Coin.swift */; };
 		69A254FF244A0B6000F2C158 /* collect.wav in Resources */ = {isa = PBXBuildFile; fileRef = 69A254FE244A0B6000F2C158 /* collect.wav */; };
 		69A25501244A184200F2C158 /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 69A25500244A184200F2C158 /* readme.md */; };
+		69A25503244B208300F2C158 /* GameSounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A25502244B208300F2C158 /* GameSounds.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		69A254FC2449949100F2C158 /* Coin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coin.swift; sourceTree = "<group>"; };
 		69A254FE244A0B6000F2C158 /* collect.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = collect.wav; sourceTree = "<group>"; };
 		69A25500244A184200F2C158 /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = SOURCE_ROOT; };
+		69A25502244B208300F2C158 /* GameSounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSounds.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +109,7 @@
 				694069C1244332700051BCA3 /* GameScene.swift */,
 				694069D7244333920051BCA3 /* MenuScene.swift */,
 				695882E82444F84100225A5E /* GameConfig.swift */,
+				69A25502244B208300F2C158 /* GameSounds.swift */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -210,6 +213,7 @@
 				695882EE2447A02100225A5E /* Car.swift in Sources */,
 				695882F02447A02E00225A5E /* TrafficCar.swift in Sources */,
 				694069D8244333920051BCA3 /* MenuScene.swift in Sources */,
+				69A25503244B208300F2C158 /* GameSounds.swift in Sources */,
 				694069C4244332700051BCA3 /* GameViewController.swift in Sources */,
 				69A254FD2449949100F2C158 /* Coin.swift in Sources */,
 				694069BC244332700051BCA3 /* AppDelegate.swift in Sources */,

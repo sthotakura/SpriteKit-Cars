@@ -30,6 +30,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var scorePosition = CGPoint(x: 0, y: 0)
     
+    let gameSounds = GameSounds()
+    
     override func didMove(to view: SKView) {
         setUp()
     }
@@ -57,7 +59,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
         
-        run(SKAction.playSoundFileNamed("Woosh", waitForCompletion: false))
+        run(gameSounds.switchLane)
     }
 
     func didBegin(_ contact: SKPhysicsContact) {
@@ -260,6 +262,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         coinScore += coin.score
         score = timeScore + coinScore
         
-        run(SKAction.playSoundFileNamed("collect", waitForCompletion: false))
+        run(gameSounds.collectCoin)
     }
 }
