@@ -32,6 +32,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     let gameSounds = GameSounds()
     
+    var traffic = [Int: Set<TrafficCar>]()
+    
     override func didMove(to view: SKView) {
         setUp()
     }
@@ -131,6 +133,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func setupTraffic() {
         rowHeight = Car.DefaultSize.height * 1.5
         
+        for lane in 0..<GameConfig.Lanes {
+            traffic[lane] = Set<TrafficCar>()
+        }
+        
         for row in 0..<GameConfig.TrafficLayout.count {
             let rowMax = frame.maxY - CGFloat(row) * rowHeight
             let rowMin = frame.maxY - CGFloat(row + 1) * rowHeight
@@ -145,9 +151,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         y = rowMin + Car.DefaultSize.height + CGFloat(15)
                     }
 
-                    let trafficCar = TrafficCar(imageNamed: getRandomCarName(), row: row, col: lane, position: CGPoint(x: x, y: y), carSpeed: laneSpeed)
+                    let trafficCar = TrafficCar(imageNamed: getRandomCarName(), row: row, lane: lane, position: CGPoint(x: x, y: y), carSpeed: laneSpeed)
                     
                     addChild(trafficCar)
+                    
+                    traffic[lane]?.insert(trafficCar)
                 }
             }
         }
@@ -206,11 +214,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func moveTraffic() {
         enumerateChildNodes(withName: "trafficCar", using:  { (node, error) in
             let car = node as! TrafficCar
-
-            car.position.y -= car.carSpeed
-
+            
+            car.position.y -= car.carSpeed;
+            
             if(car.position.y + car.size.height < self.frame.minY) {
-                car.position.y = self.frame.maxY + car.initialPosition.y
+                var newY = self.frame.maxY + car.initialPosition.y
+
+                let laneTraffic = self.traffic[car.lane]!.sorted(by: { (carOne, carTwo) -> Bool in
+                    carOne.position.y > carTwo.position.y
+                })
+
+                for laneCar in laneTraffic {
+                    if abs(newY - laneCar.position.y) < Car.DefaultSize.height {
+                        newY = laneCar.position.y + Car.DefaultSize.height + 50
+                    }
+                }
+
+                car.position.y = newY
                 car.texture = SKTexture(imageNamed: self.getRandomCarName())
             }
         })
