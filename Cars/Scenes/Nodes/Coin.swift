@@ -24,7 +24,6 @@ class Coin : SKSpriteNode {
     var collected : Bool = false
     
     init(position: CGPoint) {
-        self.type = Coin.getRandomCoinType()
         self.type = Coins.types.randomElement()!
         let texture = SKTexture(imageNamed: "coin-" + self.type)
         
