@@ -10,7 +10,15 @@ import SpriteKit
 
 class GameSounds {
     
+    static let sharedInstance = GameSounds()
+    
+    private init() {
+        
+    }
+    
     let collectCoin = SKAction.playSoundFileNamed("collect", waitForCompletion: false)
     
-    let switchLane = SKAction.playSoundFileNamed("Woosh", waitForCompletion: false)    
+    let switchLane = SKAction.playSoundFileNamed("Woosh", waitForCompletion: false)
+    
+    let crash = SKAction.playSoundFileNamed("crash", waitForCompletion: false)
 }

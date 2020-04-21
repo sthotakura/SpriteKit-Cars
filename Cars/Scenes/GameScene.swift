@@ -11,6 +11,9 @@ import GameplayKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
 
+    let scoreLabel = SKLabelNode(text: "0")
+    let gameSounds = GameSounds.sharedInstance
+
     var userCar = SKSpriteNode()
     var gameState = SceneState.notStarted
     
@@ -22,15 +25,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var laneSpeeds = [CGFloat]()
     
-    var frames : Int = 0
-    var score : Int = 0
-    var timeScore : Int = 0
-    var coinScore : Int = 0
-    let scoreLabel = SKLabelNode(text: "0")
+    var frames : Int = 0 {
+        didSet {
+            timeScore = frames / 60
+        }
+    }
+    var score : Int = 0 {
+        didSet {
+            scoreLabel.text = "\(score)"
+        }
+    }
+    var timeScore : Int = 0 {
+        didSet {
+            score = timeScore + coinScore
+        }
+    }
+    var coinScore : Int = 0 {
+        didSet {
+            score = timeScore + coinScore
+        }
+    }
     
     var scorePosition = CGPoint(x: 0, y: 0)
-    
-    let gameSounds = GameSounds()
     
     var traffic = [Int: Set<TrafficCar>]()
     
@@ -44,6 +60,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         updateScene()
+        frames += 1
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -59,9 +76,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             else {
                 userCar.run(SKAction.moveTo(x: leftX, duration: 0.25))
             }
+            
+            run(gameSounds.switchLane)
         }
-        
-        run(gameSounds.switchLane)
     }
 
     func didBegin(_ contact: SKPhysicsContact) {
@@ -70,7 +87,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let contactMask = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
         
         if contactMask == PhysicsCategory.userCar | PhysicsCategory.trafficCar {
-            sceneOver()
+            if let trafficCar = contact.bodyA.node?.name == "userCar" ? contact.bodyB.node as? TrafficCar : contact.bodyA.node as? TrafficCar {
+                sceneOver(with: trafficCar, at: contact.contactPoint)
+            }
         }
         
         if contactMask == PhysicsCategory.userCar | PhysicsCategory.coin {
@@ -89,6 +108,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         laneWidth = frame.size.width / CGFloat(GameConfig.Lanes)
         leftX = laneWidth + (laneWidth - Car.DefaultSize.width) / 2 + CGFloat(30)
         rightX = 2 * laneWidth + (laneWidth - Car.DefaultSize.width) / 2 + CGFloat(30)
+        
         laneSpeeds = [
             Helper.random(min: 1, max: 5),
             Helper.random(min: 1, max: 5),
@@ -151,7 +171,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         y = rowMin + Car.DefaultSize.height + CGFloat(15)
                     }
 
-                    let trafficCar = TrafficCar(imageNamed: getRandomCarName(), row: row, lane: lane, position: CGPoint(x: x, y: y), carSpeed: laneSpeed)
+                    let trafficCar = TrafficCar(imageNamed: Cars.names.randomElement()!, row: row, lane: lane, position: CGPoint(x: x, y: y), carSpeed: laneSpeed)
                     
                     addChild(trafficCar)
                     
@@ -172,6 +192,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 let coin = Coin(position: CGPoint(x: x, y: y - (CGFloat(c - 1 ) * (GameConfig.CoinSize.height + CGFloat(5)))))
 
                 addChild(coin)
+                
+                let coinActions = SKAction.sequence([
+                    SKAction.scale(to: 0.85, duration: 0.25),
+                    SKAction.wait(forDuration: 0.25),
+                    SKAction.scale(to: 1.0, duration: 0.25)])
+                
+                coin.run(SKAction.repeatForever(coinActions))
             }
         }
     }
@@ -196,7 +223,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         moveRoad()
         moveTraffic()
         moveCoins()
-        updateScore()
     }
     
     func moveRoad() {
@@ -231,7 +257,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
 
                 car.position.y = newY
-                car.texture = SKTexture(imageNamed: self.getRandomCarName())
+                car.texture = SKTexture(imageNamed: Cars.names.randomElement()!)
             }
         })
     }
@@ -242,45 +268,90 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             if coin.collected {
                 coin.collected = false
-                coin.position.y += self.frame.size.height * 2
+                coin.position.y += self.frame.maxY * 2
             }
             else {
                 coin.position.y -= coin.coinSpeed
                 
                 if(coin.position.y + coin.size.height < self.frame.minY) {
-                    coin.position.y += self.frame.size.height * 2
+                    coin.position.y += self.frame.maxY * 2
                 }
             }
         })
     }
-    
-    func updateScore() {
-        frames += 1
-        timeScore = frames / 60
-        score = timeScore + coinScore
-        scoreLabel.text = "\(score)"
-    }
-    
-    func getRandomCarName() -> String{
-        return Cars.names[Int(arc4random_uniform(4))]
-    }
-    
-    func sceneOver() {
+        
+    func sceneOver(with trafficCar: TrafficCar, at point: CGPoint) {
         gameState = .stopped
+        
+        run(gameSounds.crash)
+        
+        physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
+        physicsBody?.categoryBitMask = PhysicsCategory.edge
+        
+        let impulse = calculateImpulse(first: userCar.position, second: trafficCar.position)
+
+        trafficCar.physicsBody?.applyImpulse(impulse, at: point)
         
         UserDefaults.standard.set(score, forKey: "Score")
         if score > UserDefaults.standard.integer(forKey: "HighScore") {
             UserDefaults.standard.set(score, forKey: "HighScore")
         }
 
+        if let collisionParticles = SKEmitterNode(fileNamed: "Collision") {
+            collisionParticles.position = point + CGPoint(x: userCar.size.width / 2, y: 0);
+            collisionParticles.zPosition = ZPositions.smoke
+            collisionParticles.targetNode = userCar
+            addChild(collisionParticles)
+            
+            collisionParticles.run(SKAction.wait(forDuration: 2), completion: {
+                self.presentMenu()
+            })
+        } else {
+            presentMenu()
+        }
+    }
+    
+    func presentMenu() {
         let menuScene = MenuScene(size: view!.bounds.size)
         view!.presentScene(menuScene, transition: SKTransition.fade(withDuration: 0.5))
+    }
+    
+    func calculateImpulse(first a: CGPoint, second b: CGPoint) -> CGVector {
+        let impulse = CGFloat(100)
+        var dx = CGFloat(0)
+        var dy = CGFloat(0)
+        
+        if a.x < b.x {
+            dx = impulse
+        }
+        
+        if a.x > b.x {
+            dx = -impulse
+        }
+        
+        if a.y < b.y {
+            dy = impulse
+        }
+        
+        if a.y > b.y {
+            dy = -impulse
+        }
+        
+        return CGVector(dx: dx, dy: dy)
     }
     
     func collectCoin(coin: Coin) {
         coin.collected = true
         coinScore += coin.score
         score = timeScore + coinScore
+        
+        if let particles = SKEmitterNode(fileNamed: "Collection") {
+            particles.position = coin.position
+            addChild(particles)
+
+            let removeAfterDead = SKAction.sequence([SKAction.wait(forDuration: 3), SKAction.removeFromParent()])
+            particles.run(removeAfterDead)
+        }
         
         run(gameSounds.collectCoin)
     }

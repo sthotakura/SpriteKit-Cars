@@ -20,9 +20,10 @@ enum Cars {
 
 enum PhysicsCategory {
     static let none: UInt32 = 0
-    static let userCar: UInt32 = 0x01
-    static let trafficCar: UInt32 = 0x01 << 1
-    static let coin : UInt32 = 0x01 << 2
+    static let edge: UInt32 = 0x01
+    static let userCar: UInt32 = 0x01 << 1
+    static let trafficCar: UInt32 = 0x01 << 2
+    static let coin : UInt32 = 0x01 << 3
 }
 
 enum ZPositions {
@@ -30,6 +31,7 @@ enum ZPositions {
     static let coins : CGFloat = 1
     static let cars : CGFloat = 2
     static let score : CGFloat = 3
+    static let smoke : CGFloat = 4
 }
 
 class Helper {
@@ -40,6 +42,21 @@ class Helper {
     static func random(min: CGFloat, max: CGFloat) -> CGFloat {
         return random() * (max - min) + min
     }    
+}
+
+extension CGPoint {
+    
+    static public func * (left: CGPoint, right: CGFloat) -> CGPoint {
+        return CGPoint(x: left.x * right, y: left.y * right)
+    }
+    
+    static public func + (left: CGPoint, right: CGPoint) -> CGPoint {
+        return CGPoint(x: left.x + right.x, y: left.y + right.y)
+    }
+    
+    static public func - (left: CGPoint, right: CGPoint) -> CGPoint {
+        return CGPoint(x: left.x - right.x, y: left.y - right.y)
+    }
 }
 
 class GameConfig {

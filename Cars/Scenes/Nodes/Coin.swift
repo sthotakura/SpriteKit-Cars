@@ -25,6 +25,7 @@ class Coin : SKSpriteNode {
     
     init(position: CGPoint) {
         self.type = Coin.getRandomCoinType()
+        self.type = Coins.types.randomElement()!
         let texture = SKTexture(imageNamed: "coin-" + self.type)
         
         super.init(texture: texture, color: UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.0), size: texture.size())
@@ -44,9 +45,5 @@ class Coin : SKSpriteNode {
         
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    static func getRandomCoinType() -> String {
-        return Coins.types[Int(arc4random_uniform(2))]
     }
 }

@@ -14,6 +14,9 @@
 		694069C9244332710051BCA3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 694069C8244332710051BCA3 /* Assets.xcassets */; };
 		694069CC244332710051BCA3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 694069CA244332710051BCA3 /* LaunchScreen.storyboard */; };
 		694069D8244333920051BCA3 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694069D7244333920051BCA3 /* MenuScene.swift */; };
+		69495AB3244E3B3F00CCD448 /* Collision.sks in Resources */ = {isa = PBXBuildFile; fileRef = 69495AB2244E3B3F00CCD448 /* Collision.sks */; };
+		69495AB5244F4E8700CCD448 /* crash.wav in Resources */ = {isa = PBXBuildFile; fileRef = 69495AB4244F4E8700CCD448 /* crash.wav */; };
+		69495ABB244F5D6F00CCD448 /* Collection.sks in Resources */ = {isa = PBXBuildFile; fileRef = 69495ABA244F5D6F00CCD448 /* Collection.sks */; };
 		695882E92444F84100225A5E /* GameConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695882E82444F84100225A5E /* GameConfig.swift */; };
 		695882EE2447A02100225A5E /* Car.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695882ED2447A02100225A5E /* Car.swift */; };
 		695882F02447A02E00225A5E /* TrafficCar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 695882EF2447A02E00225A5E /* TrafficCar.swift */; };
@@ -34,6 +37,9 @@
 		694069CB244332710051BCA3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		694069CD244332710051BCA3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		694069D7244333920051BCA3 /* MenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
+		69495AB2244E3B3F00CCD448 /* Collision.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Collision.sks; sourceTree = "<group>"; };
+		69495AB4244F4E8700CCD448 /* crash.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = crash.wav; sourceTree = "<group>"; };
+		69495ABA244F5D6F00CCD448 /* Collection.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Collection.sks; sourceTree = "<group>"; };
 		695882E82444F84100225A5E /* GameConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameConfig.swift; sourceTree = "<group>"; };
 		695882ED2447A02100225A5E /* Car.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Car.swift; sourceTree = "<group>"; };
 		695882EF2447A02E00225A5E /* TrafficCar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrafficCar.swift; sourceTree = "<group>"; };
@@ -74,6 +80,7 @@
 		694069BA244332700051BCA3 /* Cars */ = {
 			isa = PBXGroup;
 			children = (
+				69495AB4244F4E8700CCD448 /* crash.wav */,
 				69A25500244A184200F2C158 /* readme.md */,
 				69A254FE244A0B6000F2C158 /* collect.wav */,
 				695882F12447A71F00225A5E /* Woosh.wav */,
@@ -120,6 +127,8 @@
 				694069C5244332700051BCA3 /* Main.storyboard */,
 				694069C8244332710051BCA3 /* Assets.xcassets */,
 				694069CA244332710051BCA3 /* LaunchScreen.storyboard */,
+				69495AB2244E3B3F00CCD448 /* Collision.sks */,
+				69495ABA244F5D6F00CCD448 /* Collection.sks */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -192,12 +201,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69495AB5244F4E8700CCD448 /* crash.wav in Resources */,
+				69495AB3244E3B3F00CCD448 /* Collision.sks in Resources */,
 				69A254FF244A0B6000F2C158 /* collect.wav in Resources */,
 				694069C7244332700051BCA3 /* Main.storyboard in Resources */,
 				695882F22447A71F00225A5E /* Woosh.wav in Resources */,
 				694069C9244332710051BCA3 /* Assets.xcassets in Resources */,
 				69A25501244A184200F2C158 /* readme.md in Resources */,
 				694069CC244332710051BCA3 /* LaunchScreen.storyboard in Resources */,
+				69495ABB244F5D6F00CCD448 /* Collection.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

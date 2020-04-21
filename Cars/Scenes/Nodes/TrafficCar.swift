@@ -28,7 +28,8 @@ class TrafficCar : Car {
         physicsBody?.affectedByGravity = false
         physicsBody?.categoryBitMask = PhysicsCategory.trafficCar
         physicsBody?.contactTestBitMask = PhysicsCategory.none
-        physicsBody?.collisionBitMask = PhysicsCategory.none
+        physicsBody?.collisionBitMask = PhysicsCategory.userCar | PhysicsCategory.trafficCar | PhysicsCategory.edge
+        physicsBody?.restitution = 0.5
     }
     
     required init?(coder aDecoder: NSCoder) {

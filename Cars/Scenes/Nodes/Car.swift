@@ -26,7 +26,7 @@ class Car : SKSpriteNode {
         physicsBody?.affectedByGravity = false
         physicsBody?.categoryBitMask = PhysicsCategory.userCar
         physicsBody?.contactTestBitMask = PhysicsCategory.trafficCar | PhysicsCategory.coin
-        physicsBody?.collisionBitMask = PhysicsCategory.none
+        physicsBody?.collisionBitMask = PhysicsCategory.trafficCar | PhysicsCategory.edge
     }
     
     required init?(coder aDecoder: NSCoder) {
