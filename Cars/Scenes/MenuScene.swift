@@ -62,7 +62,7 @@ class MenuScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let gameScene = GameScene(size: view!.bounds.size)
         gameScene.scaleMode = .resizeFill
-        view!.presentScene(gameScene)
+        view!.presentScene(gameScene, transition: SKTransition.fade(withDuration: 0.5))
     }
 
 }
