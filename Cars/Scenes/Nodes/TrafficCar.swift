@@ -10,15 +10,13 @@ import SpriteKit
 
 class TrafficCar : Car {
     var row: Int = 0
-    var lane: Int = 0
     var initialPosition = CGPoint()
     
     init(imageNamed: String, row: Int, lane: Int, position: CGPoint, carSpeed: CGFloat = 5.0) {
-        super.init(imageNamed: imageNamed, carSpeed: carSpeed)
+        super.init(imageNamed: imageNamed, carSpeed: carSpeed, lane: lane)
         
         self.name = "trafficCar"
         self.row = row
-        self.lane = lane
         self.initialPosition = position
         
         self.position = position

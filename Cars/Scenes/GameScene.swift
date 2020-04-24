@@ -9,19 +9,16 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene, SKPhysicsContactDelegate {
+class GameScene: SKScene {
 
     let scoreLabel = SKLabelNode(text: "0")
     let gameSounds = GameSounds.sharedInstance
 
-    var userCar = SKSpriteNode()
+    var userCar : Car!
     var gameState = SceneState.notStarted
     
     var rowHeight: CGFloat = 0
     var laneWidth: CGFloat = 0
-    
-    var leftX: CGFloat = 0
-    var rightX: CGFloat = 0
     
     var laneSpeeds = [CGFloat]()
     
@@ -46,10 +43,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    var scorePosition = CGPoint(x: 0, y: 0)
-    
     var traffic = [Int: Set<TrafficCar>]()
     
+    var swipeLeftRecognizer : UISwipeGestureRecognizer?
+    var swipeRightRecognizer : UISwipeGestureRecognizer?
+
     override func didMove(to view: SKView) {
         setUp()
     }
@@ -68,46 +66,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             startScene()
             return
         }
-        
-        if gameState == .started {
-            if userCar.position.x < frame.midX {
-                userCar.run(SKAction.moveTo(x: rightX, duration: 0.25))
-            }
-            else {
-                userCar.run(SKAction.moveTo(x: leftX, duration: 0.25))
-            }
-            
-            run(gameSounds.switchLane)
-        }
     }
-
-    func didBegin(_ contact: SKPhysicsContact) {
-        if gameState != .started { return }
-        
-        let contactMask = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
-        
-        if contactMask == PhysicsCategory.userCar | PhysicsCategory.trafficCar {
-            if let trafficCar = contact.bodyA.node?.name == "userCar" ? contact.bodyB.node as? TrafficCar : contact.bodyA.node as? TrafficCar {
-                sceneOver(with: trafficCar, at: contact.contactPoint)
-            }
-        }
-        
-        if contactMask == PhysicsCategory.userCar | PhysicsCategory.coin {
-            if let coin = contact.bodyA.node?.name == "userCar" ? contact.bodyB.node as? Coin : contact.bodyA.node as? Coin {
-                collectCoin(coin: coin)
-            }
-        }
-    }
-
     
     func setUp() {
         setupScene()
+        setupGestureRecognizers()
     }
     
     func setupScene() {
-        laneWidth = frame.size.width / CGFloat(GameConfig.Lanes)
-        leftX = laneWidth + (laneWidth - Car.DefaultSize.width) / 2 + CGFloat(30)
-        rightX = 2 * laneWidth + (laneWidth - Car.DefaultSize.width) / 2 + CGFloat(30)
+        laneWidth = (frame.size.width) / CGFloat(GameConfig.Lanes)
         
         laneSpeeds = [
             Helper.random(min: 1, max: 5),
@@ -115,7 +82,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             Helper.random(min: 1, max: 5),
             Helper.random(min: 1, max: 5)
         ]
-        scorePosition = CGPoint(x: frame.maxX - 50, y: frame.maxY - 30)
         
         setupUserCar()
         setupRoad()
@@ -129,9 +95,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func setupUserCar(){
-        userCar = Car(imageNamed: "blue-car")
+        userCar = Car(imageNamed: "blue-car", lane: 1)
         userCar.name = "userCar"
-        userCar.position.x = leftX
+        userCar.position.x = getX(for: userCar.lane)
         userCar.position.y = 82
         
         addChild(userCar)
@@ -162,10 +128,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let rowMin = frame.maxY - CGFloat(row + 1) * rowHeight
             
             for lane in 0..<GameConfig.Lanes {
-                let currentLaneX = laneWidth * CGFloat(lane)
                 let laneSpeed = laneSpeeds[lane]
                 if GameConfig.TrafficLayout[row][lane] == 1 {
-                    let x = currentLaneX + (laneWidth - Car.DefaultSize.width) / 2 + CGFloat(30)
+                    let x = getX(for: lane)
                     var y = Helper.random(min: rowMin, max: rowMax)
                     if y - Car.DefaultSize.height < rowMin {
                         y = rowMin + Car.DefaultSize.height + CGFloat(15)
@@ -182,14 +147,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func setupCoins() {
-        for lane in 1...2 {
-            
-            let currentLaneX = laneWidth * CGFloat(lane)
-            let x = currentLaneX + (laneWidth - GameConfig.CoinSize.width) / 2 +  GameConfig.CoinSize.width / 2 + GameConfig.CoinSize.width / 8
-            let y = frame.maxY - Helper.random(min: 0, max: frame.size.height / 4) * CGFloat(lane)
-            
-            for c in 1...GameConfig.CoinsPerLane {
-                let coin = Coin(position: CGPoint(x: x, y: y - (CGFloat(c - 1 ) * (GameConfig.CoinSize.height + CGFloat(5)))))
+        for row in 0..<GameConfig.CoinsLayout.count {
+            for lane in 0..<GameConfig.Lanes {
+                if GameConfig.CoinsLayout[row][lane] == 0 { continue }
+                
+                let currentLaneX = laneWidth * CGFloat(lane)
+                let x = currentLaneX + (laneWidth - GameConfig.CoinSize.width) / 2 +  GameConfig.CoinSize.width / 2 + GameConfig.CoinSize.width / 8
+                let y = frame.maxY - CGFloat(row) * Coin.DefaultSize.height * 1.2
+                
+                let coin = Coin(position: CGPoint(x: x, y: y ))
 
                 addChild(coin)
                 
@@ -207,7 +173,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.fontSize = 20.0
         scoreLabel.fontName = "AvenirNext-Bold"
         scoreLabel.fontColor = UIColor.white
-        scoreLabel.position = scorePosition
+        scoreLabel.position = CGPoint(x: frame.maxX - 50, y: frame.maxY - 30)
         scoreLabel.zPosition = ZPositions.score
         
         addChild(scoreLabel)
@@ -268,16 +234,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             if coin.collected {
                 coin.collected = false
-                coin.position.y += self.frame.maxY * 2
+                coin.position.y += self.frame.maxY * 3
             }
             else {
                 coin.position.y -= coin.coinSpeed
                 
                 if(coin.position.y + coin.size.height < self.frame.minY) {
-                    coin.position.y += self.frame.maxY * 2
+                    coin.position.y += self.frame.maxY * 3
                 }
             }
         })
+    }
+    
+    func getX(for lane: Int) -> CGFloat {
+        return CGFloat(lane) * laneWidth + Car.DefaultSize.width - (CGFloat(2 * CGFloat(lane)))
     }
         
     func sceneOver(with trafficCar: TrafficCar, at point: CGPoint) {
@@ -354,5 +324,62 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         run(gameSounds.collectCoin)
+    }
+}
+
+extension GameScene : SKPhysicsContactDelegate {
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        if gameState != .started { return }
+        
+        let contactMask = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
+        
+        if contactMask == PhysicsCategory.userCar | PhysicsCategory.trafficCar {
+            if let trafficCar = contact.bodyA.node?.name == "userCar" ? contact.bodyB.node as? TrafficCar : contact.bodyA.node as? TrafficCar {
+                sceneOver(with: trafficCar, at: contact.contactPoint)
+            }
+        }
+        
+        if contactMask == PhysicsCategory.userCar | PhysicsCategory.coin {
+            if let coin = contact.bodyA.node?.name == "userCar" ? contact.bodyB.node as? Coin : contact.bodyA.node as? Coin {
+                collectCoin(coin: coin)
+            }
+        }
+    }
+}
+
+extension GameScene {
+    
+    func setupGestureRecognizers() {
+        swipeLeftRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(GameScene.handleSwipe))
+        swipeRightRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(GameScene.handleSwipe))
+
+        swipeLeftRecognizer!.direction = .left
+        swipeRightRecognizer!.direction = .right
+        
+        view!.addGestureRecognizer(swipeLeftRecognizer!)
+        view!.addGestureRecognizer(swipeRightRecognizer!)
+    }
+
+    
+    @objc func handleSwipe(sender: UISwipeGestureRecognizer) {
+        if gameState != .started { return }
+        
+        var userCarLaneUpdated = false
+        
+        if sender.direction == .right && userCar.lane < 3 {
+            userCar.lane += 1
+            userCarLaneUpdated = true
+        }
+        
+        if sender.direction == .left && userCar.lane > 0 {
+            userCar.lane -= 1
+            userCarLaneUpdated = true
+        }
+        
+        if userCarLaneUpdated {
+            userCar.run(SKAction.moveTo(x: getX(for: userCar.lane), duration: 0.25))
+            run(gameSounds.switchLane)
+        }
     }
 }

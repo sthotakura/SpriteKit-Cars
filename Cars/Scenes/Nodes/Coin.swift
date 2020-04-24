@@ -33,7 +33,7 @@ class Coin : SKSpriteNode {
         self.size = Coin.DefaultSize
         self.position = position
         self.zPosition = ZPositions.coins
-        self.score = self.type == "a" ? 3 : 5
+        self.score = 1
 
         physicsBody = SKPhysicsBody(circleOfRadius: size.height / 2)
         physicsBody?.affectedByGravity = false

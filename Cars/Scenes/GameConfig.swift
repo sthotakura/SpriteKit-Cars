@@ -67,11 +67,29 @@ class GameConfig {
         [0,0,1,0],
     ]
     
+    static let CoinsLayout : [[Int]] = [
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,0,0,0],
+        [0,1,0,1],
+        [1,0,1,0],
+        [0,0,1,0],
+        [1,0,1,1],
+        [0,1,1,0],
+        [0,1,1,0],
+        [0,1,0,0],
+        [0,1,0,0],
+        [0,1,0,0],
+        [1,0,0,1],
+        [0,0,0,0],
+        [0,0,0,0],
+    ]
+    
     static let CoinSize = CGSize(width: 30, height: 30)
     
     static let Lanes = 4
-    
-    static let CoinsPerLane = 5
-    
+
     static let RoadSpeed = CGFloat(8)
 }

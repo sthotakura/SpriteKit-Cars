@@ -11,10 +11,12 @@ import SpriteKit
 class Car : SKSpriteNode {
     static let DefaultSize = CGSize(width: 52, height: 88.75)
     
+    var lane: Int = 0
     var carSpeed: CGFloat
     
-    init(imageNamed: String, carSpeed: CGFloat = 0.0) {
+    init(imageNamed: String, carSpeed: CGFloat = 0.0, lane: Int) {
         self.carSpeed = carSpeed
+        self.lane = lane
 
         let texture = SKTexture(imageNamed: imageNamed)
         super.init(texture: texture, color: UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.0), size: texture.size())
