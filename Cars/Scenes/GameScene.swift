@@ -170,10 +170,10 @@ class GameScene: SKScene {
     }
     
     func setupScoreLabel() {
-        scoreLabel.fontSize = 20.0
-        scoreLabel.fontName = "AvenirNext-Bold"
+        scoreLabel.fontSize = 50.0
+        scoreLabel.fontName = GameConfig.BoldFontName
         scoreLabel.fontColor = UIColor.white
-        scoreLabel.position = CGPoint(x: frame.maxX - 50, y: frame.maxY - 30)
+        scoreLabel.position = CGPoint(x: frame.midX, y: frame.maxY - frame.maxY / 8)
         scoreLabel.zPosition = ZPositions.score
         
         addChild(scoreLabel)

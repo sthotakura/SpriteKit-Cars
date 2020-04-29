@@ -30,7 +30,7 @@ class MenuScene: SKScene {
     func addLabels() {
         let playLabel = SKLabelNode(text: "Tap to Play")
         playLabel.name = "playLabel"
-        playLabel.fontName = "AvenirNext-Bold"
+        playLabel.fontName = GameConfig.BoldFontName
         playLabel.fontColor = labelColor
         playLabel.fontSize = 50.0
         playLabel.position = CGPoint(x: frame.midX, y: frame.midY)
@@ -38,14 +38,14 @@ class MenuScene: SKScene {
         animate(label: playLabel)
         
         let scoreLabel = SKLabelNode(text: "Score: " + "\(UserDefaults.standard.integer(forKey: "Score"))")
-        scoreLabel.fontName = "AvenirNext-Bold"
+        scoreLabel.fontName = GameConfig.BoldFontName
         scoreLabel.fontSize = 40.0
         scoreLabel.fontColor = labelColor
         scoreLabel.position = CGPoint(x: frame.midX, y: frame.midY - scoreLabel.frame.size.height*5)
         addChild(scoreLabel)
 
         let highScoreLabel = SKLabelNode(text: "High Score: " + "\(UserDefaults.standard.integer(forKey: "HighScore"))")
-        highScoreLabel.fontName = "AvenirNext-Bold"
+        highScoreLabel.fontName = GameConfig.BoldFontName
         highScoreLabel.fontSize = 40.0
         highScoreLabel.fontColor = labelColor
         highScoreLabel.position = CGPoint(x: frame.midX, y: scoreLabel.position.y - highScoreLabel.frame.size.height * 2)

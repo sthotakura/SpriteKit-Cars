@@ -72,15 +72,15 @@ class GameConfig {
         [0,0,0,0],
         [0,0,0,0],
         [0,0,0,0],
-        [0,0,0,0],
-        [0,1,0,1],
+        [0,0,1,0],
+        [1,1,1,1],
         [1,0,1,0],
         [0,0,1,0],
         [1,0,1,1],
-        [0,1,1,0],
-        [0,1,1,0],
         [0,1,0,0],
+        [0,1,0,1],
         [0,1,0,0],
+        [0,1,0,1],
         [0,1,0,0],
         [1,0,0,1],
         [0,0,0,0],
@@ -92,4 +92,8 @@ class GameConfig {
     static let Lanes = 4
 
     static let RoadSpeed = CGFloat(8)
+    
+    static let FontName = "AvenirNext"
+    
+    static let BoldFontName = "\(FontName)-Bold"
 }
