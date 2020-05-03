@@ -123,9 +123,11 @@ class GameScene: SKScene {
             traffic[lane] = Set<TrafficCar>()
         }
         
+        let maxY = frame.maxY + 2 * rowHeight
+        
         for row in 0..<GameConfig.TrafficLayout.count {
-            let rowMax = frame.maxY - CGFloat(row) * rowHeight
-            let rowMin = frame.maxY - CGFloat(row + 1) * rowHeight
+            let rowMax = maxY - CGFloat(row) * rowHeight
+            let rowMin = maxY - CGFloat(row + 1) * rowHeight
             
             for lane in 0..<GameConfig.Lanes {
                 let laneSpeed = laneSpeeds[lane]
