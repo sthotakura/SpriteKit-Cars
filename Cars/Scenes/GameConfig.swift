@@ -21,8 +21,8 @@ enum Cars {
 enum PhysicsCategory {
     static let none: UInt32 = 0
     static let edge: UInt32 = 0x01
-    static let userCar: UInt32 = 0x01 << 1
-    static let trafficCar: UInt32 = 0x01 << 2
+    static let player: UInt32 = 0x01 << 1
+    static let traffic: UInt32 = 0x01 << 2
     static let coin : UInt32 = 0x01 << 3
 }
 
@@ -36,26 +36,51 @@ enum ZPositions {
 
 class Helper {
     static func random() -> CGFloat {
-        return CGFloat(arc4random()) / CGFloat(0xFFFFFFFF)
+        CGFloat(arc4random()) / CGFloat(0xFFFFFFFF)
     }
     
     static func random(min: CGFloat, max: CGFloat) -> CGFloat {
-        return random() * (max - min) + min
-    }    
+        random() * (max - min) + min
+    }
+
+    static func calculateImpulse(first a: CGPoint, second b: CGPoint) -> CGVector {
+        let impulse = CGFloat(100)
+        var dx = CGFloat(0)
+        var dy = CGFloat(0)
+
+        if a.x < b.x {
+            dx = impulse
+        }
+
+        if a.x > b.x {
+            dx = -impulse
+        }
+
+        if a.y < b.y {
+            dy = impulse
+        }
+
+        if a.y > b.y {
+            dy = -impulse
+        }
+
+        return CGVector(dx: dx, dy: dy)
+    }
+
 }
 
 extension CGPoint {
     
     static public func * (left: CGPoint, right: CGFloat) -> CGPoint {
-        return CGPoint(x: left.x * right, y: left.y * right)
+        CGPoint(x: left.x * right, y: left.y * right)
     }
     
     static public func + (left: CGPoint, right: CGPoint) -> CGPoint {
-        return CGPoint(x: left.x + right.x, y: left.y + right.y)
+        CGPoint(x: left.x + right.x, y: left.y + right.y)
     }
     
     static public func - (left: CGPoint, right: CGPoint) -> CGPoint {
-        return CGPoint(x: left.x - right.x, y: left.y - right.y)
+        CGPoint(x: left.x - right.x, y: left.y - right.y)
     }
 }
 
@@ -91,9 +116,13 @@ class GameConfig {
     
     static let Lanes = 4
 
-    static let RoadSpeed = CGFloat(8)
-    
     static let FontName = "AvenirNext"
     
     static let BoldFontName = "\(FontName)-Bold"
+
+    enum Particles {
+        static let Collision = "Collision"
+        static let Collection = "Collection"
+        static let Exhaust = "Exhaust"
+    }
 }

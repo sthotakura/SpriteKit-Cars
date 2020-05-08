@@ -14,7 +14,7 @@ class GameScene: SKScene {
     let scoreLabel = SKLabelNode(text: "0")
     let gameSounds = GameSounds.sharedInstance
 
-    var userCar : Car!
+    var player: Car!
     var gameState = SceneState.notStarted
     
     var rowHeight: CGFloat = 0
@@ -24,7 +24,7 @@ class GameScene: SKScene {
     
     var frames : Int = 0 {
         didSet {
-            timeScore = frames / 60
+            timeSpent = frames / 60
         }
     }
     var score : Int = 0 {
@@ -32,18 +32,19 @@ class GameScene: SKScene {
             scoreLabel.text = "\(score)"
         }
     }
-    var timeScore : Int = 0 {
+    var timeSpent: Int = 0 {
         didSet {
-            score = timeScore + coinScore
+            score = timeSpent + coinsCollected
         }
     }
-    var coinScore : Int = 0 {
+    var coinsCollected: Int = 0 {
         didSet {
-            score = timeScore + coinScore
+            score = timeSpent + coinsCollected
         }
     }
     
     var traffic = [Int: Set<TrafficCar>]()
+    var roads = [Road]()
     
     var swipeLeftRecognizer : UISwipeGestureRecognizer?
     var swipeRightRecognizer : UISwipeGestureRecognizer?
@@ -82,36 +83,35 @@ class GameScene: SKScene {
             Helper.random(min: 1, max: 5),
             Helper.random(min: 1, max: 5)
         ]
-        
-        setupUserCar()
+
         setupRoad()
+        setupPlayer()
         setupTraffic()
         setupCoins()
         setupScoreLabel()
+        setupPhysics()
     }
     
     func setupPhysics() {
         physicsWorld.contactDelegate = self
     }
     
-    func setupUserCar(){
-        userCar = Car(imageNamed: "blue-car", lane: 1)
-        userCar.name = "userCar"
-        userCar.position.x = getX(for: userCar.lane)
-        userCar.position.y = 82
-        
-        addChild(userCar)
+    func setupPlayer(){
+        player = Car(imageNamed: "blue-car", lane: 1)
+        player.name = "player"
+        player.position.x = getX(for: player.lane)
+        player.position.y = 82
+
+        addChild(player)
     }
     
     func setupRoad() {
         for i in 0...3 {
-            let road = SKSpriteNode(imageNamed: "road")
-            road.name = "road"
-            road.zPosition = ZPositions.road
-            road.size = CGSize(width: frame.size.width, height: frame.size.height)
-            road.anchorPoint = CGPoint(x: 0, y: 0)
-            road.position = CGPoint(x: frame.minX, y:  CGFloat(i) * frame.size.height)
-            
+            let size = CGSize(width: frame.size.width, height: frame.size.height)
+            let position = CGPoint(x: frame.minX, y:  CGFloat(i) * frame.size.height)
+            let road = Road(size: size, position: position)
+
+            roads.append(road)
             addChild(road)
         }
     }
@@ -138,10 +138,14 @@ class GameScene: SKScene {
                         y = rowMin + Car.DefaultSize.height + CGFloat(15)
                     }
 
-                    let trafficCar = TrafficCar(imageNamed: Cars.names.randomElement()!, row: row, lane: lane, position: CGPoint(x: x, y: y), carSpeed: laneSpeed)
+                    let trafficCar = TrafficCar(
+                            imageNamed: Cars.names.randomElement()!,
+                            row: row,
+                            lane: lane,
+                            position: CGPoint(x: x, y: y),
+                            carSpeed: laneSpeed)
                     
                     addChild(trafficCar)
-                    
                     traffic[lane]?.insert(trafficCar)
                 }
             }
@@ -160,13 +164,6 @@ class GameScene: SKScene {
                 let coin = Coin(position: CGPoint(x: x, y: y ))
 
                 addChild(coin)
-                
-                let coinActions = SKAction.sequence([
-                    SKAction.scale(to: 0.85, duration: 0.25),
-                    SKAction.wait(forDuration: 0.25),
-                    SKAction.scale(to: 1.0, duration: 0.25)])
-                
-                coin.run(SKAction.repeatForever(coinActions))
             }
         }
     }
@@ -182,8 +179,11 @@ class GameScene: SKScene {
     }
     
     func startScene() {
-        setupPhysics()
-        userCar.run(SKAction.moveTo(y: userCar.position.y + frame.size.height / 8, duration: 1.0))
+        player.run(SKAction.moveTo(y: player.position.y + frame.size.height / 8, duration: 1.0))
+
+        player.start()
+        startTraffic()
+
         gameState = .started
     }
         
@@ -194,138 +194,81 @@ class GameScene: SKScene {
     }
     
     func moveRoad() {
-        enumerateChildNodes(withName: "road", using: { (node, error) in
-            let road = node as! SKSpriteNode
-            
-            road.position.y -= GameConfig.RoadSpeed
-            
-            if(road.position.y + road.size.height < self.frame.minY) {
-                road.position.y += self.frame.size.height * 3
-            }
-        })
+        roads.forEach { road in
+            road.move()
+        }
     }
     
     func moveTraffic() {
-        enumerateChildNodes(withName: "trafficCar", using:  { (node, error) in
+        enumerateChildNodes(withName: "traffic", using:  { (node, _) in
             let car = node as! TrafficCar
-            
-            car.position.y -= car.carSpeed;
-            
-            if(car.position.y + car.size.height < self.frame.minY) {
-                var newY = self.frame.maxY + car.initialPosition.y
-
-                let laneTraffic = self.traffic[car.lane]!.sorted(by: { (carOne, carTwo) -> Bool in
-                    carOne.position.y > carTwo.position.y
-                })
-
-                for laneCar in laneTraffic {
-                    if abs(newY - laneCar.position.y) < Car.DefaultSize.height {
-                        newY = laneCar.position.y + Car.DefaultSize.height + 50
-                    }
-                }
-
-                car.position.y = newY
-                car.texture = SKTexture(imageNamed: Cars.names.randomElement()!)
-            }
+            let laneTraffic = self.traffic[car.lane]!.sorted(by: { (carOne, carTwo) -> Bool in
+                carOne.position.y > carTwo.position.y
+            })
+            car.move(laneTraffic: laneTraffic)
         })
     }
     
     func moveCoins() {
-        enumerateChildNodes(withName: "coin", using: { (node, error) in
+        enumerateChildNodes(withName: "coin", using: { (node, _) in
             let coin = node as! Coin
-            
-            if coin.collected {
-                coin.collected = false
-                coin.position.y += self.frame.maxY * 3
-            }
-            else {
-                coin.position.y -= coin.coinSpeed
-                
-                if(coin.position.y + coin.size.height < self.frame.minY) {
-                    coin.position.y += self.frame.maxY * 3
-                }
-            }
+            coin.move()
         })
     }
     
     func getX(for lane: Int) -> CGFloat {
-        return CGFloat(lane) * laneWidth + Car.DefaultSize.width - (CGFloat(2 * CGFloat(lane)))
+        CGFloat(lane) * laneWidth + Car.DefaultSize.width - (CGFloat(2 * CGFloat(lane)))
+    }
+
+    func stopTraffic() {
+        enumerateChildNodes(withName: "traffic", using:  { (node, _) in
+            let car = node as! TrafficCar
+            car.stop()
+        })
+    }
+
+    func startTraffic() {
+        enumerateChildNodes(withName: "traffic", using:  { (node, _) in
+            let car = node as! TrafficCar
+            car.start()
+        })
     }
         
-    func sceneOver(with trafficCar: TrafficCar, at point: CGPoint) {
+    func stopScene(with trafficCar: TrafficCar, at point: CGPoint) {
         gameState = .stopped
-        
-        run(gameSounds.crash)
-        
+
+        player.crash()
+        stopTraffic()
+
         physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
         physicsBody?.categoryBitMask = PhysicsCategory.edge
-        
-        let impulse = calculateImpulse(first: userCar.position, second: trafficCar.position)
 
+        let impulse = Helper.calculateImpulse(first: player.position, second: trafficCar.position)
         trafficCar.physicsBody?.applyImpulse(impulse, at: point)
         
+        persistScore()
+
+        run(SKAction.wait(forDuration: 2), completion: {
+            self.presentMenu()
+        })
+    }
+
+    func persistScore() {
         UserDefaults.standard.set(score, forKey: "Score")
         if score > UserDefaults.standard.integer(forKey: "HighScore") {
             UserDefaults.standard.set(score, forKey: "HighScore")
         }
-
-        if let collisionParticles = SKEmitterNode(fileNamed: "Collision") {
-            collisionParticles.position = point + CGPoint(x: userCar.size.width / 2, y: 0);
-            collisionParticles.zPosition = ZPositions.smoke
-            collisionParticles.targetNode = userCar
-            addChild(collisionParticles)
-            
-            collisionParticles.run(SKAction.wait(forDuration: 2), completion: {
-                self.presentMenu()
-            })
-        } else {
-            presentMenu()
-        }
     }
-    
+
     func presentMenu() {
         let menuScene = MenuScene(size: view!.bounds.size)
         view!.presentScene(menuScene, transition: SKTransition.fade(withDuration: 0.5))
     }
-    
-    func calculateImpulse(first a: CGPoint, second b: CGPoint) -> CGVector {
-        let impulse = CGFloat(100)
-        var dx = CGFloat(0)
-        var dy = CGFloat(0)
-        
-        if a.x < b.x {
-            dx = impulse
-        }
-        
-        if a.x > b.x {
-            dx = -impulse
-        }
-        
-        if a.y < b.y {
-            dy = impulse
-        }
-        
-        if a.y > b.y {
-            dy = -impulse
-        }
-        
-        return CGVector(dx: dx, dy: dy)
-    }
-    
-    func collectCoin(coin: Coin) {
-        coin.collected = true
-        coinScore += coin.score
-        score = timeScore + coinScore
-        
-        if let particles = SKEmitterNode(fileNamed: "Collection") {
-            particles.position = coin.position
-            addChild(particles)
 
-            let removeAfterDead = SKAction.sequence([SKAction.wait(forDuration: 3), SKAction.removeFromParent()])
-            particles.run(removeAfterDead)
-        }
-        
-        run(gameSounds.collectCoin)
+    func collectCoin(coin: Coin) {
+        coin.collect()
+        coinsCollected += coin.score
+        score = timeSpent + coinsCollected
     }
 }
 
@@ -336,14 +279,14 @@ extension GameScene : SKPhysicsContactDelegate {
         
         let contactMask = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
         
-        if contactMask == PhysicsCategory.userCar | PhysicsCategory.trafficCar {
-            if let trafficCar = contact.bodyA.node?.name == "userCar" ? contact.bodyB.node as? TrafficCar : contact.bodyA.node as? TrafficCar {
-                sceneOver(with: trafficCar, at: contact.contactPoint)
+        if contactMask == PhysicsCategory.player | PhysicsCategory.traffic {
+            if let trafficCar = contact.bodyA.node?.name == "player" ? contact.bodyB.node as? TrafficCar : contact.bodyA.node as? TrafficCar {
+                stopScene(with: trafficCar, at: contact.contactPoint)
             }
         }
         
-        if contactMask == PhysicsCategory.userCar | PhysicsCategory.coin {
-            if let coin = contact.bodyA.node?.name == "userCar" ? contact.bodyB.node as? Coin : contact.bodyA.node as? Coin {
+        if contactMask == PhysicsCategory.player | PhysicsCategory.coin {
+            if let coin = contact.bodyA.node?.name == "player" ? contact.bodyB.node as? Coin : contact.bodyA.node as? Coin {
                 collectCoin(coin: coin)
             }
         }
@@ -369,18 +312,18 @@ extension GameScene {
         
         var userCarLaneUpdated = false
         
-        if sender.direction == .right && userCar.lane < 3 {
-            userCar.lane += 1
+        if sender.direction == .right && player.lane < 3 {
+            player.lane += 1
             userCarLaneUpdated = true
         }
         
-        if sender.direction == .left && userCar.lane > 0 {
-            userCar.lane -= 1
+        if sender.direction == .left && player.lane > 0 {
+            player.lane -= 1
             userCarLaneUpdated = true
         }
         
         if userCarLaneUpdated {
-            userCar.run(SKAction.moveTo(x: getX(for: userCar.lane), duration: 0.25))
+            player.run(SKAction.moveTo(x: getX(for: player.lane), duration: 0.25))
             run(gameSounds.switchLane)
         }
     }
