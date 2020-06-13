@@ -1,4 +1,4 @@
-Here is the list of tutorials I watched: 
+Here is the list of tutorials I watched to learn and create this game: 
 
 #### SpriteKit
 
