@@ -48,7 +48,6 @@ class GameScene: SKScene {
     
     var swipeLeftRecognizer : UISwipeGestureRecognizer?
     var swipeRightRecognizer : UISwipeGestureRecognizer?
-
     override func didMove(to view: SKView) {
         setUp()
     }
@@ -235,7 +234,7 @@ class GameScene: SKScene {
     }
         
     func stopScene(with trafficCar: TrafficCar, at point: CGPoint) {
-        gameState = .stopped
+        //gameState = .stopped
 
         player.crash()
         stopTraffic()
@@ -296,8 +295,8 @@ extension GameScene : SKPhysicsContactDelegate {
 extension GameScene {
     
     func setupGestureRecognizers() {
-        swipeLeftRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(GameScene.handleSwipe))
-        swipeRightRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(GameScene.handleSwipe))
+        swipeLeftRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        swipeRightRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
 
         swipeLeftRecognizer!.direction = .left
         swipeRightRecognizer!.direction = .right

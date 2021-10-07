@@ -26,7 +26,7 @@
 		69A254FF244A0B6000F2C158 /* collect.wav in Resources */ = {isa = PBXBuildFile; fileRef = 69A254FE244A0B6000F2C158 /* collect.wav */; };
 		69A25501244A184200F2C158 /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 69A25500244A184200F2C158 /* readme.md */; };
 		69A25503244B208300F2C158 /* GameSounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69A25502244B208300F2C158 /* GameSounds.swift */; };
-		DAC989C42622995BDD97B2AC /* Road.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAC98F25C468EE3AD786DB76 /* Road.swift */; };
+		DAC989D5B4A73CBE09F91319 /* Road.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAC988A696F223BDCE4ADDD0 /* Road.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,7 +51,7 @@
 		69A254FE244A0B6000F2C158 /* collect.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = collect.wav; sourceTree = "<group>"; };
 		69A25500244A184200F2C158 /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = SOURCE_ROOT; };
 		69A25502244B208300F2C158 /* GameSounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSounds.swift; sourceTree = "<group>"; };
-		DAC98F25C468EE3AD786DB76 /* Road.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Road.swift; sourceTree = "<group>"; };
+		DAC988A696F223BDCE4ADDD0 /* Road.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Road.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,7 +144,7 @@
 				695882ED2447A02100225A5E /* Car.swift */,
 				695882EF2447A02E00225A5E /* TrafficCar.swift */,
 				69A254FC2449949100F2C158 /* Coin.swift */,
-				DAC98F25C468EE3AD786DB76 /* Road.swift */,
+				DAC988A696F223BDCE4ADDD0 /* Road.swift */,
 			);
 			path = Nodes;
 			sourceTree = "<group>";
@@ -176,7 +176,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1140;
-				LastUpgradeCheck = 1140;
+				LastUpgradeCheck = 1300;
 				ORGANIZATIONNAME = "Neharjun Technologies Limited";
 				TargetAttributes = {
 					694069B7244332700051BCA3 = {
@@ -236,7 +236,7 @@
 				694069C4244332700051BCA3 /* GameViewController.swift in Sources */,
 				69A254FD2449949100F2C158 /* Coin.swift in Sources */,
 				694069BC244332700051BCA3 /* AppDelegate.swift in Sources */,
-				DAC989C42622995BDD97B2AC /* Road.swift in Sources */,
+				DAC989D5B4A73CBE09F91319 /* Road.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,6 +288,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -348,6 +349,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;

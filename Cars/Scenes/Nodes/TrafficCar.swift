@@ -50,4 +50,8 @@ class TrafficCar : Car {
             texture = SKTexture(imageNamed: Cars.names.randomElement()!)
         }
     }
+
+    func increaseSpeed() {
+        carSpeed += 1
+    }
 }
